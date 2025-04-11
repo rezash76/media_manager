@@ -1,13 +1,12 @@
 # Media Manager Plugin
 
 [![pub package](https://img.shields.io/pub/v/media_manager.svg)](https://pub.dev/packages/media_manager)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/SwanFlutter/media_manager)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS-blue.svg)](https://github.com/SwanFlutter/media_manager)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Flutter plugin for managing media files and directories across multiple platforms. This plugin provides a comprehensive set of features for browsing directories, accessing media files, and managing file operations.
 
 ## Features
-
 
 - Directory browsing and navigation
 - File type detection and categorization
@@ -15,15 +14,17 @@ A Flutter plugin for managing media files and directories across multiple platfo
 - Media file organization (Images, Videos, Audio, Documents, Archives)
 - File size formatting
 - Storage permission handling
-- Cross-platform support (Android, iOS, Windows, Linux, macOS)
+- Cross-platform support (Android, iOS, macOS)
 
 ## Installation
 
 Add this to your package's `pubspec.yaml` file:
 
 ```yaml
+
 dependencies:
-  media_manager: ^0.0.1
+  media_manager: ^0.0.2
+
 ```
 
 ## Usage
@@ -31,45 +32,73 @@ dependencies:
 ### Initialize the Plugin
 
 ```dart
+
 import 'package:media_manager/media_manager.dart';
 
+```
+
+```dart
+
 final mediaManager = MediaManager();
+
+```
+
+### Get Platform Version
+
+```dart
+// Get the platform version
+void checkPlatformVersion() async {
+  String? version = await mediaManager.getPlatformVersion();
+  print('Platform version: $version');
+}
 ```
 
 ### Request Storage Permission
 
 ```dart
 // Request storage permission (Android/iOS only)
-final hasPermission = await mediaManager.requestStoragePermission();
-if (hasPermission) {
-  // Permission granted, proceed with operations
-} else {
-  // Handle permission denied
+void checkAndRequestPermission() async {
+  bool hasPermission = await mediaManager.requestStoragePermission();
+  if (hasPermission) {
+    print('Permission granted, proceeding with operations');
+    // Continue with media operations
+  } else {
+    print('Permission denied, showing error message');
+    // Show error or request again
+  }
 }
+
 ```
 
 ### Get Directories
 
 ```dart
+
 // Get list of directories
-final directories = await mediaManager.getDirectories();
-for (final directory in directories) {
-  print('Name: ${directory['name']}');
-  print('Path: ${directory['path']}');
+void listDirectories() async {
+  List<Map<String, dynamic>> dirs = await mediaManager.getDirectories();
+  for (var dir in dirs) {
+    print('Directory: ${dir['name']}');
+    print('Path: ${dir['path']}');
+  }
 }
+
 ```
 
 ### Get Directory Contents
 
 ```dart
 // Get contents of a specific directory
-final contents = await mediaManager.getDirectoryContents('/path/to/directory');
-for (final item in contents) {
-  print('Name: ${item['name']}');
-  print('Type: ${item['type']}');
-  print('Size: ${item['readableSize']}');
-  print('Is Directory: ${item['isDirectory']}');
-  print('Extension: ${item['extension']}');
+void showDirectoryContents() async {
+  String path = '/storage/emulated/0/Downloads';
+  var contents = await mediaManager.getDirectoryContents(path);
+  for (var item in contents) {
+    print('Name: ${item['name']}');
+    print('Type: ${item['type']}');
+    print('Size: ${item['readableSize']}');
+    print('Is Directory: ${item['isDirectory']}');
+    print('Extension: ${item['extension']}');
+  }
 }
 ```
 
@@ -77,12 +106,20 @@ for (final item in contents) {
 
 ```dart
 // Get image preview with caching
-final imageData = await mediaManager.getImagePreview('/path/to/image.jpg');
-if (imageData != null) {
-  // Display image using Image.memory
-  Image.memory(
-    imageData,
-    fit: BoxFit.cover,
+Widget buildImagePreview(String imagePath) {
+  return FutureBuilder<Uint8List?>(
+    future: mediaManager.getImagePreview(imagePath),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done && 
+          snapshot.data != null) {
+        return Image.memory(
+          snapshot.data!,
+          fit: BoxFit.cover,
+        );
+      } else {
+        return CircularProgressIndicator();
+      }
+    },
   );
 }
 ```
@@ -91,32 +128,105 @@ if (imageData != null) {
 
 ```dart
 // Clear the image preview cache
-await mediaManager.clearImageCache();
+void clearCache() async {
+  bool success = await mediaManager.clearImageCache();
+  if (success) {
+    print('Cache cleared successfully');
+  } else {
+    print('Failed to clear cache');
+  }
+}
 ```
 
-### Get Media Files by Type
+### Get All Images
 
 ```dart
-// Get all images
-final images = await mediaManager.getAllImages();
+// Get all images from device storage
+void displayAllImages() async {
+  List<String> images = await mediaManager.getAllImages();
+  print('Found ${images.length} images');
+  for (String path in images) {
+    print('Image path: $path');
+    // Use paths to display images in your UI
+  }
+}
+```
 
-// Get all videos
-final videos = await mediaManager.getAllVideos();
+### Get All Videos
 
-// Get all audio files
-final audioFiles = await mediaManager.getAllAudio();
+```dart
+// Get all videos from device storage
+void listAllVideos() async {
+  List<String> videos = await mediaManager.getAllVideos();
+  print('Found ${videos.length} videos');
+  for (String videoPath in videos.take(5)) {
+    print('Video: $videoPath');
+    // Process video files
+  }
+}
+```
 
-// Get all documents
-final documents = await mediaManager.getAllDocuments();
+### Get All Audio Files
 
-// Get all archive files
-final archives = await mediaManager.getAllZipFiles();
+```dart
+// Get all audio files from device storage
+void scanAudioLibrary() async {
+  List<String> audioFiles = await mediaManager.getAllAudio();
+  print('Your audio library contains ${audioFiles.length} files');
+  
+  // Create audio player for the first file if available
+  if (audioFiles.isNotEmpty) {
+    String firstAudioPath = audioFiles.first;
+    print('First audio file: $firstAudioPath');
+    // Initialize audio player with this path
+  }
+}
+```
 
-// Get all code files
-final codeFiles = await mediaManager.getAllCodeFiles();
+### Get All Documents
 
-// Get all CAD files
-final cadFiles = await mediaManager.getAllCADFiles();
+```dart
+// Get all document files from device storage
+void organizeDocuments() async {
+  List<String> docs = await mediaManager.getAllDocuments();
+  
+  // Group documents by extension
+  Map<String, List<String>> docsByType = {};
+  
+  for (String path in docs) {
+    String ext = path.split('.').last.toLowerCase();
+    if (!docsByType.containsKey(ext)) {
+      docsByType[ext] = [];
+    }
+    docsByType[ext]!.add(path);
+  }
+  
+  // Print document statistics
+  docsByType.forEach((ext, files) {
+    print('Found ${files.length} .$ext files');
+  });
+}
+```
+
+### Get All Zip Files
+
+```dart
+// Get all zip/archive files from device storage
+void findArchives() async {
+  List<String> archives = await mediaManager.getAllZipFiles();
+  print('Found ${archives.length} archive files');
+  
+  // Calculate total size of all archives
+  for (String archivePath in archives) {
+    print('Archive: $archivePath');
+    // You could get file size here and sum them
+  }
+  
+  // Show dialog to user if many large archives are found
+  if (archives.length > 10) {
+    print('Consider cleaning up your archive files to save space');
+  }
+}
 ```
 
 ## Complete Example
@@ -229,12 +339,6 @@ class _MediaManagerScreenState extends State<MediaManagerScreen> {
 ### Archives
 - zip, rar, tar, gz, 7z, bz2, xz, lzma, cab, iso, dmg
 
-### Code Files
-- c, cpp, h, hpp, cs, java, kt, swift, dart, py, js, jsx, ts, tsx, php, rb, sh, bat, cmd, pl, lua, sql, json, yaml, xml, ini, cfg, toml
-
-### CAD Files
-- dwg, dxf, stl, obj, 3ds, max, blend, skp, ai, eps, svg, fig, xd, cdr, ifc, step, iges, bim
-
 ## Platform Specific Notes
 
 ### Android
@@ -247,21 +351,6 @@ class _MediaManagerScreenState extends State<MediaManagerScreen> {
 - Limited to user's media library
 - Some file operations may be restricted
 - Requires photo library access permission
-
-### Windows
-- Uses Windows GDI+ for image processing
-- Full access to file system
-- No storage permission required
-- Supports all file types and operations
-- Uses Windows-specific path handling
-
-### Linux
-- Uses GTK/GIO for file operations
-- Uses GDK-Pixbuf for image processing
-- Full access to file system
-- No storage permission required
-- Supports all file types and operations
-- Uses Linux-specific path handling
 
 ### macOS
 - Uses AppKit/NSImage for image processing
