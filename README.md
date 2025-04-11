@@ -1,5 +1,9 @@
 # Media Manager Plugin
 
+[![pub package](https://img.shields.io/pub/v/media_manager.svg)](https://pub.dev/packages/media_manager)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/SwanFlutter/media_manager)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Flutter plugin for managing media files and directories across multiple platforms. This plugin provides a comprehensive set of features for browsing directories, accessing media files, and managing file operations.
 
 ## Features
