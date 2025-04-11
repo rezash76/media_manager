@@ -6,15 +6,38 @@
 
 A Flutter plugin for managing media files and directories across multiple platforms. This plugin provides a comprehensive set of features for browsing directories, accessing media files, and managing file operations.
 
-## Features
+## ✨ Features
 
-- Directory browsing and navigation
-- File type detection and categorization
-- Image preview with caching
-- Media file organization (Images, Videos, Audio, Documents, Archives)
-- File size formatting
-- Storage permission handling
-- Cross-platform support (Android, iOS, macOS)
+- 📁 **Directory browsing and navigation**  
+  Browse through device storage with full directory tree support
+
+- 🔍 **File type detection and categorization**  
+  Automatically detect and categorize files by their type and extension
+
+- 🖼️ **Image preview with caching**  
+  Generate and cache thumbnails for quick image previews
+
+- 🗂️ **Media file organization**  
+  Easily access files by type:
+    - 🖼️ Images
+    - 🎥 Videos
+    - 🎵 Audio
+    - 📄 Documents
+    - 🗜️ Archives (ZIP, RAR, etc.)
+
+- 📏 **File size formatting**  
+  Human-readable file sizes (e.g., 2.5 MB instead of 2621440 bytes)
+
+- 🔐 **Storage permission handling**  
+  Simplified permission management for accessing device storage
+
+- 📱 **Cross-platform support**  
+  Works seamlessly across:
+    - 🤖 Android
+    - 🍏 iOS
+    - 💻 macOS
+
+
 
 ## Installation
 

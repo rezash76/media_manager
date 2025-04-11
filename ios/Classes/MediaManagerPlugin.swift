@@ -56,89 +56,86 @@ public class MediaManagerPlugin: NSObject, FlutterPlugin {
             getAllFilesByType(result: result, extensions: ["mp3", "wav", "m4a"])
 
         case "getAllDocuments":
-  getAllFilesByType(
-    result: result,
-    extensions: [
-      // Document formats
-      "pdf", "doc", "docx", "docm", "dot", "dotx", "dotm",
-      "txt", "rtf", "odt", "ott", "odm", "oth",
-      "xml", "html", "htm", "xhtml", "mhtml",
-      "epub", "mobi", "azw", "fb2",
+            let documentExtensions = [
+                // Document formats
+                "pdf", "doc", "docx", "docm", "dot", "dotx", "dotm",
+                "txt", "rtf", "odt", "ott", "odm", "oth",
+                "xml", "html", "htm", "xhtml", "mhtml",
+                "epub", "mobi", "azw", "fb2",
 
-      // Spreadsheet formats
-      "xls", "xlsx", "xlsm", "xlsb", "xlt", "xltx", "xltm",
-      "ods", "ots", "csv",
+                // Spreadsheet formats
+                "xls", "xlsx", "xlsm", "xlsb", "xlt", "xltx", "xltm",
+                "ods", "ots", "csv",
 
-      // Presentation formats
-      "ppt", "pptx", "pptm", "pps", "ppsx", "ppsm",
-      "pot", "potx", "potm", "odp", "otp",
+                // Presentation formats
+                "ppt", "pptx", "pptm", "pps", "ppsx", "ppsm",
+                "pot", "potx", "potm", "odp", "otp",
 
-      // Programming/Code files
-      "dart", "php", "js", "jsx", "ts", "tsx", "py", "java",
-      "kt", "kts", "cpp", "c", "h", "hpp", "cs", "go", "rb",
-      "swift", "m", "mm", "sh", "bash", "ps1", "bat", "cmd",
-      "pl", "pm", "lua", "sql", "json", "yaml", "yml", "toml",
-      "ini", "cfg", "conf", "gradle", "properties", "asm",
-      "s", "v", "vhdl", "verilog", "r", "d", "f", "f90",
-      "coffee", "scala", "groovy", "clj", "cljc", "cljs",
-      "edn", "ex", "exs", "elm", "erl", "hrl", "fs", "fsx",
-      "fsi", "ml", "mli", "nim", "pde", "pp", "pas", "lisp",
-      "cl", "scm", "ss", "rkt", "st", "tcl", "vhd", "vhdl",
+                // Programming/Code files
+                "dart", "php", "js", "jsx", "ts", "tsx", "py", "java",
+                "kt", "kts", "cpp", "c", "h", "hpp", "cs", "go", "rb",
+                "swift", "m", "mm", "sh", "bash", "ps1", "bat", "cmd",
+                "pl", "pm", "lua", "sql", "json", "yaml", "yml", "toml",
+                "ini", "cfg", "conf", "gradle", "properties", "asm",
+                "s", "v", "vhdl", "verilog", "r", "d", "f", "f90",
+                "coffee", "scala", "groovy", "clj", "cljc", "cljs",
+                "edn", "ex", "exs", "elm", "erl", "hrl", "fs", "fsx",
+                "fsi", "ml", "mli", "nim", "pde", "pp", "pas", "lisp",
+                "cl", "scm", "ss", "rkt", "st", "tcl", "vhd", "vhdl",
 
-      // Web development
-      "vue", "svelte", "astro", "php", "phtml", "twig",
-      "mustache", "hbs", "ejs", "haml", "scss", "sass",
-      "less", "styl", "stylus", "coffee", "litcoffee",
-      "graphql", "gql", "wasm", "wat",
+                // Web development
+                "vue", "svelte", "astro", "php", "phtml", "twig",
+                "mustache", "hbs", "ejs", "haml", "scss", "sass",
+                "less", "styl", "stylus", "coffee", "litcoffee",
+                "graphql", "gql", "wasm", "wat",
 
-      // CAD/Design files
-      "dwg", "dxf", "dgn", "stl", "obj", "3ds", "max", "blend",
-      "skp", "ai", "psd", "eps", "svg", "fig", "xd", "indd",
-      "cdr", "afdesign", "afphoto", "afpub", "sketch", "ase",
-      "aseprite", "clip", "csp", "kra", "pdn", "procreate",
-      "xcf", "pd", "ps", "psb",
+                // CAD/Design files
+                "dwg", "dxf", "dgn", "stl", "obj", "3ds", "max", "blend",
+                "skp", "ai", "psd", "eps", "svg", "fig", "xd", "indd",
+                "cdr", "afdesign", "afphoto", "afpub", "sketch", "ase",
+                "aseprite", "clip", "csp", "kra", "pdn", "procreate",
+                "xcf", "pd", "ps", "psb",
 
-      // Archive formats
-      "zip", "rar", "7z", "tar", "gz", "bz2", "xz", "lz",
-      "lzma", "lzh", "arj", "cab", "iso", "img", "dmg",
-      "pkg", "deb", "rpm", "msi", "crx",
+                // Archive formats
+                "zip", "rar", "7z", "tar", "gz", "bz2", "xz", "lz",
+                "lzma", "lzh", "arj", "cab", "iso", "img", "dmg",
+                "pkg", "deb", "rpm", "msi", "crx",
 
-      // Ebook formats
-      "djvu", "chm", "oxps", "xps", "cbr", "cbz", "cb7",
-      "cbt", "cba", "ibooks",
+                // Ebook formats
+                "djvu", "chm", "oxps", "xps", "cbr", "cbz", "cb7",
+                "cbt", "cba", "ibooks",
 
-      // Database files
-      "db", "sqlite", "sqlite3", "mdb", "accdb", "frm", "myd",
-      "myi", "ibd", "mdf", "ldf", "sdf", "nsf", "kdbx",
-      "gdb", "fp7", "neo", "db3",
+                // Database files
+                "db", "sqlite", "sqlite3", "mdb", "accdb", "frm", "myd",
+                "myi", "ibd", "mdf", "ldf", "sdf", "nsf", "kdbx",
+                "gdb", "fp7", "neo", "db3",
 
-      // Other common document formats
-      "md", "markdown", "tex", "log", "pages", "wpd", "wps",
-      "abw", "zabw", "123", "602", "wk1", "wk3", "wk4", "wq1",
-      "wq2", "xlw", "pmd", "sxw", "stw", "vor", "sxg", "otg",
-      "odg", "odc", "odf", "odi", "oxt", "sxc", "stc", "sxd",
-      "std", "sxi", "sti", "sxm", "mml", "smf", "odfl", "hwp",
-      "hwt", "cell", "numbers", "key", "numbers-tef", "key-tef",
-      "papers", "uof", "uot", "uos", "uop", "wmf", "emf", "cgm",
-      "vsd", "vsdx", "vss", "vst", "vdx", "vsdm", "vssm", "vstm",
-      "pub", "xpub", "sldprt", "sldasm", "slddrw", "prt", "asm",
-      "drw", "f3d", "f3z", "iam", "ipt", "catproduct", "catpart",
-      "catdrawing", "cgr", "dlv", "exp", "model", "par", "psm",
-      "pwd", "session", "sim", "sldlfp", "sldlfp", "std", "stl",
-      "stp", "unv", "xas", "xpr", "3dm", "3mf", "amf", "dae",
-      "fbx", "glb", "gltf", "iges", "igs", "jt", "obj", "ply",
-      "stp", "step", "vrml", "wrl", "x3d", "x3db", "x3dv", "xgl",
-      "zgl", "bim", "ifc", "dwf", "dwfx", "nwd", "nwf", "nwc",
-      "pln", "pla", "pod", "skb", "layout", "template", "lcd",
-      "max", "ma", "mb", "hip", "hiplc", "hda", "hdanc", "usd",
-      "usda", "usdc", "usdz", "abc", "vdb", "bgeo", "geo", "pc",
-      "pdc", "pdb", "ptc", "rib", "rs", "sc", "scn", "v", "veg",
-      "vfb", "vfz", "vob", "vpe", "vray", "vrmesh", "vscene",
-      "vue", "w3d", "wings", "wrl", "x", "x3d", "x3dv", "xsi",
-      "zbrush"
-    ]
-  );
-  break;
+                // Other common document formats
+                "md", "markdown", "tex", "log", "pages", "wpd", "wps",
+                "abw", "zabw", "123", "602", "wk1", "wk3", "wk4", "wq1",
+                "wq2", "xlw", "pmd", "sxw", "stw", "vor", "sxg", "otg",
+                "odg", "odc", "odf", "odi", "oxt", "sxc", "stc", "sxd",
+                "std", "sxi", "sti", "sxm", "mml", "smf", "odfl", "hwp",
+                "hwt", "cell", "numbers", "key", "numbers-tef", "key-tef",
+                "papers", "uof", "uot", "uos", "uop", "wmf", "emf", "cgm",
+                "vsd", "vsdx", "vss", "vst", "vdx", "vsdm", "vssm", "vstm",
+                "pub", "xpub", "sldprt", "sldasm", "slddrw", "prt", "asm",
+                "drw", "f3d", "f3z", "iam", "ipt", "catproduct", "catpart",
+                "catdrawing", "cgr", "dlv", "exp", "model", "par", "psm",
+                "pwd", "session", "sim", "sldlfp", "sldlfp", "std", "stl",
+                "stp", "unv", "xas", "xpr", "3dm", "3mf", "amf", "dae",
+                "fbx", "glb", "gltf", "iges", "igs", "jt", "obj", "ply",
+                "stp", "step", "vrml", "wrl", "x3d", "x3db", "x3dv", "xgl",
+                "zgl", "bim", "ifc", "dwf", "dwfx", "nwd", "nwf", "nwc",
+                "pln", "pla", "pod", "skb", "layout", "template", "lcd",
+                "max", "ma", "mb", "hip", "hiplc", "hda", "hdanc", "usd",
+                "usda", "usdc", "usdz", "abc", "vdb", "bgeo", "geo", "pc",
+                "pdc", "pdb", "ptc", "rib", "rs", "sc", "scn", "v", "veg",
+                "vfb", "vfz", "vob", "vpe", "vray", "vrmesh", "vscene",
+                "vue", "w3d", "wings", "wrl", "x", "x3d", "x3dv", "xsi",
+                "zbrush"
+            ]
+            getAllFilesByType(result: result, extensions: documentExtensions)
 
         case "getAllZipFiles":
             getAllFilesByType(result: result, extensions: ["zip", "rar"])
@@ -180,8 +177,13 @@ public class MediaManagerPlugin: NSObject, FlutterPlugin {
         let directoryURL = URL(fileURLWithPath: path)
 
         do {
+            var resourceKeys: [URLResourceKey] = [.fileSizeKey]
+            if #available(iOS 14.0, *) {
+                resourceKeys.append(.contentTypeKey)
+            }
+            
             let contents = try fileManager.contentsOfDirectory(at: directoryURL,
-                                                              includingPropertiesForKeys: [.contentTypeKey, .fileSizeKey],
+                                                              includingPropertiesForKeys: resourceKeys,
                                                               options: [.skipsHiddenFiles])
 
             let items = contents.map { url -> [String: Any] in
